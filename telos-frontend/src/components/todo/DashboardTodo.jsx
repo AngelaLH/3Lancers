@@ -109,7 +109,12 @@ const DashboardTodo = () => {
   // Change date for reschedule
   const reDateChange = (event) => {
     setReDate(event.target.value);
-    setselectedTodo({ name: selectedTodo.name, due: event.target.value, isOverdue: true, completed: false });
+    setselectedTodo({
+      name: selectedTodo.name,
+      due: event.target.value,
+      isOverdue: true,
+      completed: false,
+    });
   };
 
   // handle checkbox
@@ -138,9 +143,8 @@ const DashboardTodo = () => {
   };
 
   const closeAdd = () => {
-    setAdd(false);
-    sortEvent();
     setAnchorEl(null);
+    setAdd(false);
   };
 
   // same
@@ -156,6 +160,7 @@ const DashboardTodo = () => {
 
   const secondEvent = () => {
     setNewItem((prev) => [...prev, item]);
+    // sortEvent();
     // setItem('');
   };
   // //const handleOptionClose = () => {
@@ -170,11 +175,6 @@ const DashboardTodo = () => {
       completed: value.completed,
     });
     setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-    setAdd(false);
   };
 
   const cancelEvent = () => {
@@ -387,7 +387,7 @@ const DashboardTodo = () => {
                       label="Button"
                       onClick={() => {
                         secondEvent();
-                        handleClose();
+                        closeAdd();
                         // handleClose?
                       }}
                     >
@@ -431,7 +431,6 @@ const DashboardTodo = () => {
           className={styles.menubar}
           onClick={() => {
             deleteEvent();
-            setAnchorEl(null);
           }}
         >
           Delete
