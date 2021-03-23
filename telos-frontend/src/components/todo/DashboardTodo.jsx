@@ -140,6 +140,7 @@ const DashboardTodo = () => {
   const closeAdd = () => {
     setAdd(false);
     sortEvent();
+    setAnchorEl(null);
   };
 
   // same
@@ -157,7 +158,9 @@ const DashboardTodo = () => {
     setNewItem((prev) => [...prev, item]);
     // setItem('');
   };
-
+  // //const handleOptionClose = () => {
+  //   setAnchorEl(null);
+  // };
   // Open menu
   const handleOption = (value) => (event) => {
     setReItem({
@@ -167,10 +170,6 @@ const DashboardTodo = () => {
       completed: value.completed,
     });
     setAnchorEl(event.currentTarget);
-  };
-
-  const handleOptionClose = () => {
-    setAnchorEl(null);
   };
 
   const cancelEvent = () => {
@@ -222,15 +221,14 @@ const DashboardTodo = () => {
         {newItem.map((todo) => {
           // also index
           const labelId = `checkbox-list-label-${todo}`;
-
           return (
             <ListItem
-              className={styles.listItem} // change to styles.tasks
+              className={styles.tasks} // change to styles.tasks
               key={todo.name}
               role={undefined}
               dense
               button
-              onClick={handleToggle(todo.name)}
+              onClick={handleToggle(todo.name)} // onClick={() => handleToggle(todo)}
             >
               {todo.isOverdue ? (
                 <ListItemIcon>
@@ -246,7 +244,7 @@ const DashboardTodo = () => {
               ) : (
                 <ListItemIcon>
                   <Checkbox
-                    // add className={styles.checkbox}
+                    className={styles.checkbox}
                     edge="start"
                     color="primary"
                     checked={todo.completed}
@@ -265,6 +263,7 @@ const DashboardTodo = () => {
                   style={{
                     textDecorationLine: cancel.indexOf(todo.name) !== -1 ? 'line-through' : '',
                     textDecorationStyle: cancel.indexOf(todo.name) !== -1 ? 'solid' : '',
+                    // add making it red here, its somewhere else in the code?
                   }}
                 />
               ) : (
@@ -325,18 +324,73 @@ const DashboardTodo = () => {
         })}
       </List>
       <div>
-        {/* remove dashboard sty */}
-        <FormControl className={styles.inputbox} variant="outlined">
+      <FormControl className={styles.inputbox} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">New To Do</InputLabel>
           <OutlinedInput
-            id="outlined-todo"
-            value=""
-            onChange={firstEvent}
+            disabled
+            id="outlined-disabled"
+            label="Disabled"
             endAdornment={
               <InputAdornment position="end">
-                <IconButton className={styles.AddBtn} onClick={openAdd}>
-                  <AddIcon className={styles.Publish} />
+                <IconButton
+                  className={styles.AddBtn}
+                  variant="outlined"
+                  color="primary"
+                  onClick={openAdd} // change to handleClickModal
+                  id="simple-modal"
+                  anchorEl={anchorEl}
+                  add={Boolean(anchorEl)}
+                >
+                  <AddIcon className={styles.Publish} aria-controls="simple-modal" />
                 </IconButton>
+                <Dialog open={add} onClose={closeAdd} aria-labelledby="form-dialog-title">
+                  <DialogTitle id="form-dialog-title">New To Do</DialogTitle>
+                  <DialogContent>
+                    <form className={classes.datecontainer} noValidate>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        value={item.name}
+                        // onChange={(e) => setTodoName(e.target.value)}
+                        onChange={firstEvent}
+                        label="Description"
+                        fullWidth
+                      />
+                      <TextField
+                        id="date"
+                        label="Due Date:"
+                        labelColour="black"
+                        type="date"
+                        value={dueDate}
+                        onChange={dateChange}
+                        // onChange={(e) => setTodoDueDate(e.target.value)}
+                        className={classes.datetextField}
+                        fullWidth // this is different
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </form>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button className={classes.button} onClick={closeAdd}>
+                      Cancel
+                    </Button>
+                    <Button
+                      className={classes.button}
+                      label="Button"
+                      onClick={() => {
+                        secondEvent();
+                        closeAdd();
+                        setAnchorEl(null);
+                        // handleClose?
+                      }}
+                    >
+                      Confirm
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </InputAdornment>
             }
             labelWidth={70}
@@ -348,11 +402,7 @@ const DashboardTodo = () => {
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleOptionClose}
-        style={{
-          alignItems: 'center',
-          textAlign: 'center',
-        }}
+        onClose={closeMigrate} // handleClose
       >
         <MenuItem
           className={styles.menubar}
@@ -383,41 +433,6 @@ const DashboardTodo = () => {
           Delete
         </MenuItem>
       </Menu>
-      <Dialog open={add} onClose={closeAdd} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">New To Do</DialogTitle>
-        <DialogContent>
-          <form className={classes.datecontainer} noValidate>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Description"
-              value={item.name}
-              onChange={firstEvent}
-              fullWidth
-            />
-            <TextField
-              id="date"
-              label="Due date"
-              type="date"
-              value={dueDate}
-              onChange={dateChange}
-              className={classes.datetextField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button color="secondary" onClick={closeAdd}>
-            Cancel
-          </Button>
-          <Button color="primary" onClick={secondEvent}>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
       <Dialog open={migrate} onClose={closeMigrate} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Migrate Event</DialogTitle>
         <DialogContent>
