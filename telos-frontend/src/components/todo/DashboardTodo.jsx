@@ -85,7 +85,7 @@ const DashboardTodo = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [cancel, setCancel] = useState([0]);
   const [reDate, setReDate] = useState('');
-  const [reItem, setReItem] = useState('');
+  const [selectedTodo, setselectedTodo] = useState('');
   const [add, setAdd] = useState(false);
   const [migrate, setMigrate] = useState(false);
   // const [selectedTodo, setSelectedTodo] = useState({});
@@ -109,7 +109,7 @@ const DashboardTodo = () => {
   // Change date for reschedule
   const reDateChange = (event) => {
     setReDate(event.target.value);
-    setReItem({ name: reItem.name, due: event.target.value, isOverdue: true, completed: false });
+    setselectedTodo({ name: selectedTodo.name, due: event.target.value, isOverdue: true, completed: false });
   };
 
   // handle checkbox
@@ -163,7 +163,7 @@ const DashboardTodo = () => {
   // };
   // Open menu
   const handleOption = (value) => (event) => {
-    setReItem({
+    setselectedTodo({
       name: value.name,
       due: value.due,
       isOverdue: value.isOverdue,
@@ -172,11 +172,16 @@ const DashboardTodo = () => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleClose = () => {
+    setAnchorEl(null);
+    setAdd(false);
+  };
+
   const cancelEvent = () => {
-    const currentIndex = cancel.indexOf(reItem.name); // change to selectedtodo
+    const currentIndex = cancel.indexOf(selectedTodo.name); // change to selectedtodo
     const newCancel = [...cancel];
     if (currentIndex === -1) {
-      newCancel.push(reItem.name);
+      newCancel.push(selectedTodo.name);
     } else {
       newCancel.splice(currentIndex, 1);
     }
@@ -186,7 +191,7 @@ const DashboardTodo = () => {
   const deleteEvent = () => {
     const newList = [...newItem];
     for (const x of newList) {
-      if (x.name === reItem.name) {
+      if (x.name === selectedTodo.name) {
         const index = newList.indexOf(x);
         newList.splice(index, 1);
       }
@@ -198,11 +203,11 @@ const DashboardTodo = () => {
 
   const scheduleEvent = () => {
     const newList = [...newItem];
-    const reItemInst = reItem;
+    const selectedTodoInst = selectedTodo;
 
     for (const x of newList) {
-      if (x.name === reItemInst.name) {
-        x.due = reItemInst.due;
+      if (x.name === selectedTodoInst.name) {
+        x.due = selectedTodoInst.due;
       }
     }
 
@@ -382,8 +387,7 @@ const DashboardTodo = () => {
                       label="Button"
                       onClick={() => {
                         secondEvent();
-                        closeAdd();
-                        setAnchorEl(null);
+                        handleClose();
                         // handleClose?
                       }}
                     >
@@ -420,7 +424,7 @@ const DashboardTodo = () => {
             setAnchorEl(null);
           }}
         >
-          {cancel.indexOf(reItem.name) !== -1 ? 'Uncancel' : 'Cancel'}
+          {cancel.indexOf(selectedTodo.name) !== -1 ? 'Uncancel' : 'Cancel'}
         </MenuItem>
         <MenuItem
           id="delete"
