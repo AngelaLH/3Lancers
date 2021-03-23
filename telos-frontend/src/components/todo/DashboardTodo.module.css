@@ -21,14 +21,22 @@
   color: white;
 }
 
-.listItem:hover {
+.tasks:hover {
   background-color: #efdcfc !important;
 }
 
-.listItem:active {
+.tasks:active {
   background-color: #8b46eb !important;
 }
 
 .outdated {
   color: red !important;
+}
+
+.checkbox {
+  color: #828282 !important;
+}
+
+.checkboxOverdue {
+  color: #eb5757 !important;
 }
