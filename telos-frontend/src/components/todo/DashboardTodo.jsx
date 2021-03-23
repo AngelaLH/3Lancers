@@ -324,7 +324,7 @@ const DashboardTodo = () => {
         })}
       </List>
       <div>
-      <FormControl className={styles.inputbox} variant="outlined">
+        <FormControl className={styles.inputbox} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">New To Do</InputLabel>
           <OutlinedInput
             disabled
@@ -435,15 +435,32 @@ const DashboardTodo = () => {
       </Menu>
       <Dialog open={migrate} onClose={closeMigrate} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Migrate Event</DialogTitle>
-        <DialogContent>
+        <DialogContent className={classes.migrate}>
           <form className={classes.datecontainer} noValidate>
             <TextField
-              id="reDated"
-              label="Reschedule"
+              id="date"
+              label="Move to:"
+              labelColour="black"
               type="date"
               value={reDate}
               onChange={reDateChange}
               className={classes.datetextField}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </form>
+        </DialogContent>
+        <DialogContent>
+          <form noValidate>
+            <TextField
+              id="date"
+              label="Edit Due Date(optional):"
+              labelColour="black"
+              type="date"
+              defaultValue="2020-05-24"
+              fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
@@ -451,10 +468,23 @@ const DashboardTodo = () => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button color="secondary" onClick={closeMigrate}>
+          <Button
+            className={classes.button}
+            onClick={() => {
+              setMigrate(false);
+              setAnchorEl(null);
+            }}
+          >
             Cancel
           </Button>
-          <Button color="primary" onClick={scheduleEvent}>
+          <Button
+            className={classes.button}
+            onClick={() => {
+              scheduleEvent();
+              setMigrate(false);
+              setAnchorEl(null);
+            }}
+          >
             Confirm
           </Button>
         </DialogActions>
