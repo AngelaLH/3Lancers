@@ -182,6 +182,11 @@ const DashboardTodo = () => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleClose = () => {
+    setAnchorEl(null);
+    setAdd(false);
+  };
+
   const cancelEvent = () => {
     const currentIndex = cancel.indexOf(selectedTodo.name); // change to selectedtodo
     const newCancel = [...cancel];
