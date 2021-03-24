@@ -79,14 +79,14 @@ const DashboardTodo = () => {
   ];
 
   const classes = useStyles();
-  const [item, setItem] = useState('');
-  const [dueDate, setDueDate] = useState('2021-01-01');
+  const [todoName, setTodoName] = useState('');
+  const [todoDueDate, setTodoDueDate] = useState('2021-01-01');
   const [newItem, setNewItem] = useState(listitems);
   const [anchorEl, setAnchorEl] = useState(null);
   const [cancel, setCancel] = useState([0]);
   const [reDate, setReDate] = useState('');
   const [selectedTodo, setselectedTodo] = useState('');
-  const [add, setAdd] = useState(false);
+  const [open, setOpen] = useState(false);
   const [migrate, setMigrate] = useState(false);
   // const [selectedTodo, setSelectedTodo] = useState({});
 
@@ -129,22 +129,27 @@ const DashboardTodo = () => {
     setNewItem(newList);
   };
 
-  const firstEvent = (event) => {
-    setItem({ name: event.target.value, due: dueDate, isOverdue: true, completed: false });
-  };
-
-  const dateChange = (event) => {
-    setDueDate(event.target.value);
-    setItem({ name: item.name, due: event.target.value, isOverdue: true, completed: false });
-  };
-
   const openAdd = () => {
-    setAdd(true);
+    setOpen(true);
   };
 
   const closeAdd = () => {
     setAnchorEl(null);
-    setAdd(false);
+    setOpen(false);
+  };
+
+  const firstEvent = (event) => {
+    setTodoName({ name: event.target.value, due: todoDueDate, isOverdue: true, completed: false });
+  };
+
+  const dateChange = (event) => {
+    setTodoDueDate(event.target.value);
+    setTodoName({
+      name: todoName.name,
+      due: event.target.value,
+      isOverdue: true,
+      completed: false,
+    });
   };
 
   // same
@@ -159,7 +164,7 @@ const DashboardTodo = () => {
   };
 
   const secondEvent = () => {
-    setNewItem((prev) => [...prev, item]);
+    setNewItem((prev) => [...prev, todoName]);
     // sortEvent();
     // setItem('');
   };
@@ -348,7 +353,7 @@ const DashboardTodo = () => {
                 >
                   <AddIcon className={styles.Publish} aria-controls="simple-modal" />
                 </IconButton>
-                <Dialog open={add} onClose={closeAdd} aria-labelledby="form-dialog-title">
+                <Dialog open={open} onClose={closeAdd} aria-labelledby="form-dialog-title">
                   <DialogTitle id="form-dialog-title">New To Do</DialogTitle>
                   <DialogContent>
                     <form className={classes.datecontainer} noValidate>
@@ -356,7 +361,7 @@ const DashboardTodo = () => {
                         autoFocus
                         margin="dense"
                         id="name"
-                        value={item.name}
+                        value={todoName.name}
                         // onChange={(e) => setTodoName(e.target.value)}
                         onChange={firstEvent}
                         label="Description"
@@ -367,9 +372,9 @@ const DashboardTodo = () => {
                         label="Due Date:"
                         labelColour="black"
                         type="date"
-                        value={dueDate}
+                        value={todoDueDate}
                         onChange={dateChange}
-                        // onChange={(e) => setTodoDueDate(e.target.value)}
+                        // onChange={(e) => setTodotodoDueDate(e.target.value)}
                         className={classes.datetextField}
                         fullWidth // this is different
                         InputLabelProps={{
